@@ -1,0 +1,33 @@
+{
+  "name": "my-first-playwright-project",
+  "version": "1.0.0",
+  "description": "Learning Playwright basics",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:mobile": "playwright test --project='Mobile Chrome'",
+    "test:saucedemo": "TEST_SITE=saucedemo playwright test tests/saucedemo.spec.ts",
+    "test:todomcv": "TEST_SITE=todomcv playwright test tests/todomcv.spec.ts",
+    "test:parallel": "playwright test --workers=4",
+    "test:serial": "playwright test --workers=1",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen",
+    "codegen:saucedemo": "playwright codegen https://www.saucedemo.com",
+    "codegen:todomcv": "playwright codegen https://demo.playwright.dev/todomvc",
+    "install:browsers": "playwright install"
+  },
+  "keywords": ["playwright", "testing", "automation", "e2e"],
+  "author": "Chinenye",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.5.2"
+  }
+}
