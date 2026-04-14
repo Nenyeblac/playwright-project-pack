@@ -4,9 +4,8 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-export const getTestUser = (env: string = 'saucedemo')=>{
+export const SauceDemoUsers = {
 
-    const users = {
         saucedemo:{
         standard: {
         username: process.env.SAUCEDEMO_STANDARD_USER || 'standard_user',
@@ -40,9 +39,7 @@ export const getTestUser = (env: string = 'saucedemo')=>{
         }
     }
         
-    };
 
-    return users;
    
 };
 
