@@ -31,7 +31,8 @@ this.errorMessage = page.locator('[data-test="error"]');
  
 this.errorButton = page.locator('.error-button');
 }
- 
+
+//methods 
 async goto() {
  
 await this.page.goto('https://www.saucedemo.com/');
