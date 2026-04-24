@@ -53,5 +53,46 @@ test.describe('SauceDemo End-to-End Checkout Flow', () => {
         const completeMessage = await checkoutPage.getCompleteMessage();
         expect(completeMessage).toContain('Thank you for your order');
     });
+
+    test('checkout with single product', async({page}) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await loginPage.login('standard_user', 'secret_sauce');
+
+        const productsPage = new ProductsPage(page);
+        await productsPage.addProductToCartByName('Sauce Labs Onesie');
+        await productsPage.clickShoppingCart();
+        
+        const cartPage = new CartPage(page);
+        await cartPage.clickCheckout();
+        
+        const checkoutPage = new CheckoutPage(page);
+        await checkoutPage.fillShippingInformation('Jane', 'Smith', '54321');
+        await checkoutPage.clickContinue();
+        await checkoutPage.clickFinish();
+
+        const completeMessage = await checkoutPage.getCompleteMessage();
+        expect(completeMessage).toBe('Thank you for your order!');
+        
+    });
+
+    test('cannot checkout with empty cart', async({page}) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await loginPage.login('standard_user', 'secret_sauce');
+
+        const productsPage = new ProductsPage(page);
+        await productsPage.clickShoppingCart();
+
+        const cartPage = new CartPage(page);
+        const itemCount = await cartPage.getCartItemCount();
+        expect(itemCount).toBe('0');
+
+        //checkout button should still be clickable but cart is empty
+        await cartPage.clickCheckout();
+
+        //should be on checkout page
+        await expect(page).toHaveURL(/.*checkout-step-one.*/);
+    });
 });
 
