@@ -1,8 +1,7 @@
 import { Page, Locator } from '@playwright/test';
+import { BasePage } from '../shared/BasePage';
  
-export class LoginPage {
- 
-readonly page: Page;
+export class LoginPage extends BasePage {
  
 readonly usernameInput: Locator;
  
@@ -16,7 +15,7 @@ readonly errorButton: Locator;
  
 constructor(page: Page) {
  
-this.page = page;
+super(page);
  
 // Locators based on actual SauceDemo elements
  
@@ -33,7 +32,7 @@ this.errorButton = page.locator('.error-button');
  
 async goto() {
  
-await this.page.goto('https://www.saucedemo.com/');
+await super.goto('https://www.saucedemo.com/');
  
 }
  
