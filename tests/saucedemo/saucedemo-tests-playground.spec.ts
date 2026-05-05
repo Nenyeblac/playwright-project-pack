@@ -3,6 +3,12 @@ import {test, expect} from '@playwright/test';
 import { LoginPage } from '../../page-objects/saucedemo/LoginPage';
 import { ProductsPage } from '../../page-objects/saucedemo/ProductsPage';
 import { SauceDemoUsers } from '../../utils/saucedemo-data';
+import{CheckoutPage} from '../../page-objects/saucedemo/CheckoutPage';
+//for testing using JSON File
+import productsData from '../../test-data/saucedemo-products.json';
+//for faker for dynamic data
+import{faker} from '@faker-js/faker';
+
 
 test('successful login redirects to products page',async({page}) => {
 
@@ -209,3 +215,104 @@ test('multiple validations with soft assertions', async({page}) => {
 
     //All soft assertion failures are reported at the end
 })
+
+
+//Data-Driven Testing
+
+//Using Arrays
+
+const testUsers = [
+    {username: 'standard_user', password: 'secret_sauce', shouldSucceed: true},
+    {username: 'locked_out_user', password: 'secret_sauce', shouldSucceed: false},
+    {username: 'problem_user', password: 'secret_sauce', shouldSucceed: true},
+    {username: 'invalid_user', password: 'wrong_password', shouldSucceed: false},
+];
+
+test.describe('SauceDemo Login with Multiple Users', () => {
+    for(const user of testUsers){
+
+        test(`login test for ${user.username}`, async({page}) => {
+            const loginPage = new LoginPage(page);
+            await loginPage.goto();
+            await loginPage.login(user.username, user.password);
+
+            if(user.shouldSucceed){
+                await expect(page).toHaveURL(/inventory/);
+            } else {
+                const isErrorVisible = await loginPage.isErrorVisible();
+                expect(isErrorVisible).toBeTruthy();
+            }
+        });
+    }
+});
+
+//Using JSON Files
+
+test.describe('SauceDemo Products from JSON', () => {
+
+    test.beforeEach(async({page}) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await loginPage.login('standard_user', 'secret_sauce');
+    });
+
+    for(const product of productsData){
+        test(`can add ${product.name}`, async({page}) => {
+            const productsPage = new ProductsPage(page);
+            await productsPage.addProductToCartByName(product.name);
+
+            const isInCart = await productsPage.isProductInCart(product.name);
+            expect(isInCart).toBe(product.expectedInCart);
+
+            const price = await productsPage.getProductPrice(product.name);
+            expect(price).toBe(product.price);
+        });
+    }
+});
+
+
+//Using Faker for Dynamic Data
+//run npm install --save-dev @faker-js/faker
+
+test.describe('SauceDemo Checkout with Faker', () => {
+    
+    //Generate random data
+    const checkoutData = {
+        firstName: faker.person.firstName(),
+        lastName:  faker.person.lastName(),
+        postalCode: faker.location.zipCode()
+    };
+
+    //login and add products 
+
+    // ...
+    
+    test('fill in shipping information', async({page}) => {
+         const checkoutPage = new CheckoutPage(page);
+         await checkoutPage.fillShippingInformation(
+            checkoutData.firstName,
+            checkoutData.lastName,
+            checkoutData.postalCode
+         );
+         await checkoutPage.clickContinue();
+
+         //verify we can proceed with radom data
+         await expect(page).toHaveURL(/checkout-step-two/);
+    });
+
+    test('checkout with multiple random users', async({page}) => {
+        for(let i = 0; i < 5; i++){
+            const userData = {
+                firstName: faker.person.firstName(),
+                lastName: faker.person.lastName(),
+                postalCode: faker.location.zipCode('#####')
+            };
+            console.log(`Test ${i + 1}: ${userData.firstName} ${userData.lastName}`);
+
+            //Run test with this data
+
+            // ...
+        }
+    });
+   
+});
