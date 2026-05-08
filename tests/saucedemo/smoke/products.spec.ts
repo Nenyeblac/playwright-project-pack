@@ -1,7 +1,7 @@
 import {test, expect} from '@playwright/test';
-import { LoginPage } from '../../page-objects/saucedemo/LoginPage';
-import { ProductsPage } from '../../page-objects/saucedemo/ProductsPage';
-import { SortOption } from '../../utils/saucedemo-data';
+import { LoginPage } from '../../../page-objects/saucedemo/LoginPage';
+import { ProductsPage } from '../../../page-objects/saucedemo/ProductsPage';
+import { SortOption } from '../../../utils/saucedemo-data';
 
 test.describe('SauceDemo Products Tests', () => {
     

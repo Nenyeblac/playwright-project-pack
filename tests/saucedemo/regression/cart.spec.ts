@@ -1,7 +1,7 @@
 import {test, expect } from "@playwright/test"
-import{LoginPage} from '../../page-objects/saucedemo/LoginPage.ts';
-import { ProductsPage } from "../../page-objects/saucedemo/ProductsPage.ts";
-import { CartPage } from "../../page-objects/saucedemo/CartPage.ts";
+import{LoginPage} from '../../../page-objects/saucedemo/LoginPage.ts';
+import { ProductsPage } from "../../../page-objects/saucedemo/ProductsPage.ts";
+import { CartPage } from "../../../page-objects/saucedemo/CartPage.ts";
 
 
 //Cart Item Display Tests

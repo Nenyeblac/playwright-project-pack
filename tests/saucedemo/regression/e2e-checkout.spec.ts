@@ -1,9 +1,9 @@
 import{test, expect} from '@playwright/test';
 
-import{LoginPage} from '../../page-objects/saucedemo/LoginPage.ts';
-import{ProductsPage} from '../../page-objects/saucedemo/ProductsPage';
-import{CartPage} from '../../page-objects/saucedemo/CartPage';
-import{CheckoutPage} from '../../page-objects/saucedemo/CheckoutPage';
+import{LoginPage} from '../../../page-objects/saucedemo/LoginPage.ts';
+import{ProductsPage} from '../../../page-objects/saucedemo/ProductsPage.ts';
+import{CartPage} from '../../../page-objects/saucedemo/CartPage.ts';
+import{CheckoutPage} from '../../../page-objects/saucedemo/CheckoutPage.ts';
 
 test.describe('SauceDemo End-to-End Checkout Flow', () => {
     test('complete checkout flow with multiple products', async({page}) => {

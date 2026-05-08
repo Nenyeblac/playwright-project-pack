@@ -2,7 +2,7 @@
 
 import { test, expect } from '@playwright/test';
  
-import { LoginPage } from '../../page-objects/saucedemo/LoginPage';
+import { LoginPage } from '../../../page-objects/saucedemo/LoginPage';
  
 test.describe('SauceDemo Login Tests', () => {
  
