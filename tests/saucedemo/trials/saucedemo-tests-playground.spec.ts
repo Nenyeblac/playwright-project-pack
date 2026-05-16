@@ -1,13 +1,16 @@
+
 import {test, expect} from '@playwright/test';
 
-import { LoginPage } from '../../page-objects/saucedemo/LoginPage';
-import { ProductsPage } from '../../page-objects/saucedemo/ProductsPage';
-import { SauceDemoUsers } from '../../utils/saucedemo-data';
-import{CheckoutPage} from '../../page-objects/saucedemo/CheckoutPage';
+import { LoginPage } from '../../../page-objects/saucedemo/LoginPage';
+import { ProductsPage } from '../../../page-objects/saucedemo/ProductsPage';
+import { SauceDemoUsers } from '../../../utils/saucedemo-data';
+import{CheckoutPage} from '../../../page-objects/saucedemo/CheckoutPage';
+import {CartPage} from '../../../page-objects/saucedemo/CartPage';
 //for testing using JSON File
-import productsData from '../../test-data/saucedemo-products.json';
+import productsData from '../../../test-data/saucedemo-products.json';
 //for faker for dynamic data
 import{faker} from '@faker-js/faker';
+import { CheckoutDataBuilder } from '../../../utils/test-data-builder';
 
 
 test('successful login redirects to products page',async({page}) => {
@@ -316,3 +319,114 @@ test.describe('SauceDemo Checkout with Faker', () => {
     });
    
 });
+
+
+
+
+
+
+
+
+
+
+//TEST TIPS
+
+//Test Step for Complex Flows
+//Break down complex tests into steps
+
+test('complete checkout flow', async({page}) => {
+
+    await test.step('Login', async() =>{
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await loginPage.login('standard_user', 'secret_sauce');
+    });
+
+    await test.step('add product to cart', async() => {
+        const productsPage = new ProductsPage(page);
+        await productsPage.addProductToCartByName('Sauce Labs Backpack');
+        await productsPage.addProductToCartByName('Sauce Labs Bike Light');
+    });
+
+    await test.step('navigate to cart', async() => {
+        const cartPage = new CartPage(page);
+        await cartPage.clickCheckout();
+
+        const checkoutPage = new CheckoutPage(page);
+        await checkoutPage.fillShippingInformation('John', 'Doe', '12345');
+        await checkoutPage.clickContinue();
+        await checkoutPage.clickFinish();
+    });
+
+    await test.step('verify order completion', async() => {
+        const checkoutPage = new CheckoutPage(page);
+        const isCOmplete = await checkoutPage.isOrderComplete();
+        expect(isCOmplete).toBeTruthy();
+    });
+});
+
+
+//Using Test Data Builder
+const checkoutData = new CheckoutDataBuilder()
+.withFirstName('Jane')
+.withPostalCode('54321')
+.build();
+
+
+//Conditional Test Execution tip
+test('admin only feature', async({page}) => {
+    test.skip(process.env.USER_ROLE !== 'admin', 'Admin only');
+    //Admin test
+});
+
+test('mobile only test', async ({page, isMobile}) => {
+    test.skip(!isMobile, 'Mobile only');
+    //Mobile test
+});
+
+//Test Retry Configuration Tip
+
+// For flaky tests
+test('potentially flaky test', async ({ page }) => {
+test.info().annotations.push({
+type: 'issue',
+description: 'Tracking flakiness'
+ 
+});
+ 
+// Test code
+ 
+});
+
+
+//Screenshot Comparison Tip
+test('visual regression with tolerance', async ({ page }) => {
+await page.goto('https://www.saucedemo.com/');
+await expect(page).toHaveScreenshot('login.png', {
+maxDiffPixels: 100, // Allow 100 pixel difference
+threshold: 0.2, // 20% difference threshold
+});
+ 
+});
+
+//Network Mocking
+test('mock API response', async ({ page }) => {
+ 
+// Mock API call
+await page.route('**/api/products', route => {
+route.fulfill({
+status: 200,
+
+body: JSON.stringify([
+{ id: 1, name: 'Mocked Product', price: 99.99 }
+])
+ 
+});
+ 
+}); 
+await page.goto('/products');
+ 
+// Test with mocked data 
+});
+
+

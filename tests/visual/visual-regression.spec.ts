@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-import{LoginPage} from '../../../page-objects/saucedemo/LoginPage.ts'
+import{LoginPage} from '../../page-objects/saucedemo/LoginPage.ts'
 
 //Basic screenshot testing
 test('visual test - login page', async({page}) => {

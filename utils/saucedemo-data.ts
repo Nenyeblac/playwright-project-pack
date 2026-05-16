@@ -19,6 +19,11 @@ export const SauceDemoUsers = {
         problem: {
         username: process.env.SAUCEDEMO_STANDARD_USER || 'problem_user',
         password: process.env.SAUCEDEMO_PASSWORD || 'secret_sauce',
+        },
+
+        performance: {
+            username: process.env.SAUCEDEMO_STANDARD_USER || 'performance_glitch_user',
+            password: process.env.SAUCEDEMO_PASSWORD || 'secret_sauce'
         }
     };  
 
